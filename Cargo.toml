@@ -1,6 +1,7 @@
 [workspace] 
 members = [
 	"chapter-01"
+	"chapter-04"
 ]
 
 [profile.dev]

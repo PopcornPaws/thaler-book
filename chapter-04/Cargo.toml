@@ -1,0 +1,8 @@
+[package]
+name = "sum-check"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ark-poly = "0.3.0"
+bls = { package = "ark-bls12-381", version = "0.3.0" }
