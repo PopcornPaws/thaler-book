@@ -4,5 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+ark-ff = "0.3.0"
 ark-poly = "0.3.0"
 bls = { package = "ark-bls12-381", version = "0.3.0" }
+intbits = "0.2.0"
