@@ -1,8 +1,13 @@
 [workspace] 
 members = [
-	"chapter-01",
-	"chapter-04"
+	"freivalds",
+	"sum-check"
 ]
 
 [profile.dev]
 opt-level = 3
+
+[workspace.dependencies]
+ark-ff = "0.4"
+ark-poly = "0.4"
+bls = { package = "ark-bls12-381",  version = "0.4" }

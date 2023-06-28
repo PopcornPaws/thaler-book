@@ -1,5 +1,3 @@
-use ark_bls12_381 as bls;
-
 use ark_ff::{Field, One, Zero};
 use bls::fq::Fq;
 use nalgebra::{SMatrix as Matrix, SVector as Vector};

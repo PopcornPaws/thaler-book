@@ -1,10 +1,10 @@
 [package]
-name = "freivalds-algorithm"
+name = "freivalds"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ark-bls12-381 = "0.3.0"
-ark-ff = "0.3.0"
+ark-ff = { workspace = true }
+bls = { workspace = true }
 nalgebra = "0.31.0"
 rand = { version = "0.8.5", features = ["std_rng"] }

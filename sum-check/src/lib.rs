@@ -1,17 +1,19 @@
+mod utils;
+
 use ark_ff::{One, Zero};
 use ark_poly::polynomial::multivariate;
-use ark_poly::polynomial::multivariate::SparseTerm as MultiTerm;
-use ark_poly::polynomial::multivariate::Term;
+use ark_poly::polynomial::multivariate::{SparseTerm, Term};
 use ark_poly::polynomial::univariate;
-use ark_poly::{MVPolynomial, Polynomial};
+use ark_poly::Polynomial;
 use bls::Fr;
-use intbits::Bits;
 
-type MultiPoly = multivariate::SparsePolynomial<Fr, MultiTerm>;
+type MultiPoly = multivariate::SparsePolynomial<Fr, SparseTerm>;
 type UniPoly = univariate::SparsePolynomial<Fr>;
 
 struct Prover {
+    /// Original polynomial known to the prover
     poly: MultiPoly,
+    /// Random challenges sent by the verifier
     r_vec: Vec<Fr>,
 }
 
@@ -24,15 +26,12 @@ impl Prover {
     }
 
     fn init_poly_sum(&self) -> Fr {
-        let binary_inputs = binary_inputs(self.poly.num_vars() as u8);
-        binary_inputs
-            .iter()
-            .fold(Fr::zero(), |acc, x| acc + self.poly.evaluate(x))
+        utils::sum_binary_evals(&self.poly)
     }
 
     fn next_unipoly(&self) -> UniPoly {
         let mut unipoly = UniPoly::from_coefficients_vec(vec![]);
-        let twos_exponent = self.poly.num_vars() - self.r_vec.len() - 1;
+        let twos_exponent = self.poly.num_vars - self.r_vec.len() - 1;
         for i in 0..2usize.pow(twos_exponent as u32) {
             for (coeff, term) in &self.poly.terms {
                 let mut power: Option<usize> = None;
@@ -61,24 +60,24 @@ impl Prover {
     }
 }
 
-fn binary_inputs(size: u8) -> Vec<Vec<Fr>> {
-    (0..2_u32.pow(u32::from(size)))
-        .map(|i| (0..size).map(|j| Fr::from(i.bit(j))).collect::<Vec<Fr>>())
-        .collect()
-}
-
 #[cfg(test)]
 mod test {
     use super::*;
+    use ark_poly::DenseMVPolynomial;
 
     #[test]
     fn simple_prover() {
+        // 3-variate polynomial
+        // g(x, y, z) = 2x³+ xz + yz
+        // x - 0 input index
+        // y - 1 input index
+        // z - 2 input index
         let poly = MultiPoly::from_coefficients_vec(
             3,
             vec![
-                (Fr::from(2), MultiTerm::new(vec![(0, 3)])),
-                (Fr::from(1), MultiTerm::new(vec![(0, 1), (2, 1)])),
-                (Fr::from(1), MultiTerm::new(vec![(1, 1), (2, 1)])),
+                (Fr::from(2), SparseTerm::new(vec![(0, 3)])),
+                (Fr::from(1), SparseTerm::new(vec![(0, 1), (2, 1)])),
+                (Fr::from(1), SparseTerm::new(vec![(1, 1), (2, 1)])),
             ],
         );
         let mut prover = Prover::new(poly);
