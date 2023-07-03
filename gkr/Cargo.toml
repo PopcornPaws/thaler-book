@@ -1,0 +1,8 @@
+[package]
+name = "gkr"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ark-poly = { workspace = true }
+bls = { workspace = true }

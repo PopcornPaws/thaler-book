@@ -1,7 +1,8 @@
 [workspace] 
 members = [
 	"freivalds",
-	"sum-check"
+    "gkr",
+	"sum-check",
 ]
 
 [profile.dev]
