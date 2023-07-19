@@ -1,3 +1,6 @@
+pub mod circuit;
+
+// each layer should have a multilinear extension that's a log2(S_i)-variate polynomial
 #[cfg(test)]
 mod test {
     use ark_poly::polynomial::multivariate::{SparsePolynomial, SparseTerm, Term};
