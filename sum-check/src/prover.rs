@@ -27,7 +27,7 @@ impl Prover {
     pub fn next_unipoly(&self) -> UniPoly {
         let mut unipoly = UniPoly::from_coefficients_vec(vec![]);
         let twos_exponent = self.poly.num_vars - self.r_vec.len() - 1;
-        for i in 0..2usize.pow(twos_exponent as u32) {
+        for i in 0..(1usize << twos_exponent) {
             for (coeff, term) in &self.poly.terms {
                 let mut power: Option<usize> = None;
                 let mut prod = *coeff;
@@ -62,8 +62,8 @@ impl Prover {
 #[cfg(test)]
 mod test {
     use super::*;
-    use ark_poly::DenseMVPolynomial;
     use ark_poly::polynomial::multivariate::SparseTerm;
+    use ark_poly::DenseMVPolynomial;
 
     #[test]
     fn simple_prover() {

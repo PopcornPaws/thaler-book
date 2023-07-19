@@ -97,12 +97,32 @@ impl Circuit {
 mod test {
     use super::*;
 
+    #[test]
+    fn three_layers() {
+        let desc = vec![
+            vec![
+                ([0, 0], Op::Mul),
+                ([1, 1], Op::Mul),
+                ([1, 2], Op::Add),
+                ([3, 3], Op::Add),
+            ],
+            vec![([0, 1], Op::Mul), ([2, 3], Op::Add)],
+        ];
+        
+        let inputs = vec![Fr::from(3), Fr::from(2), Fr::from(4), Fr::from(5)];
+        let circuit = Circuit::new(inputs.clone(), desc);
+
+        assert_eq!(circuit.eval_layer(2), inputs);
+        assert_eq!(circuit.eval_layer(1), vec![Fr::from(9), Fr::from(4), Fr::from(6), Fr::from(10)]);
+        assert_eq!(circuit.eval_layer(0), vec![Fr::from(36), Fr::from(16)]);
+    }
+
     // 1 addition gate (outputs the sum of squares)
     // 2 addition gates (adding a^2 + b^2 and c^2 + d^2)
     // 4 multiplication gates (squaring each input)
     // 4 input gates
     #[test]
-    fn circuit_eval() {
+    fn four_layers() {
         let desc = vec![
             vec![
                 ([0, 0], Op::Mul),
